@@ -15,3 +15,17 @@ $ git clone https://github.com/marianogaragiola/emacs_config.git ~/.emacs.d
 #+END_SRC
 
 Open ~emacs~ and wait until the installation is finished.
+
+*** Known issues
+
+If you get and error with an /Expired ELPA GPG Keys/, you can fix it with:
+
+#+BEGIN_SRC sh
+$ gpg --homedir ~/.emacs.d/elpa/gnupg --receive-keys 066DAFCB81E42C40
+#+END_SRC
+
+Alternatively you can modify the expiration date of the old key with something like:
+
+#+BEGIN_SRC sh
+$ gpg --homedir ~/.emacs.d/elpa/gnupg --quick-set-expire 474F05837FBDEF9B 1y
+#+END_SRC
