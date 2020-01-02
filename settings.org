@@ -1,0 +1,375 @@
+* Basic Configuration for Emacs
+
+** Variable Initializer
+#+BEGIN_SRC emacs-lisp
+  (use-package "startup"
+    :ensure nil
+    :config (setq inhibit-startup-screen t))
+;; (package-initialize)
+
+;; (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
+
+(setq package-check-signature nil)
+
+;; load emacs 24's package system. Add MELPA repository.
+(when (>= emacs-major-version 24)
+  (require 'package)
+  (add-to-list
+   'package-archives
+   '("melpa" . "http://stable.melpa.org/packages/") ; many packages won't show if using stable
+   ;; '("melpa" . "http://melpa.milkbox.net/packages/")
+   t))
+#+END_SRC
+
+** Custom Variables
+#+BEGIN_SRC emacs-lisp
+(set-face-attribute 'default nil :height 130)
+(tool-bar-mode -1)
+(menu-bar-mode -1)
+(set-default 'truncate-lines t)
+(global-linum-mode t)
+(column-number-mode 1)
+(progn
+  ;; make indentation commands use space only (never tab character)
+  (setq-default indent-tabs-mode nil)
+  ;; emacs 23.1 to 26, default to t
+  ;; if indent-tabs-mode is t, it means it may use tab, resulting mixed space and tab
+  )
+;; set default tab char's display width to 4 spaces
+(setq-default tab-width 4) ; emacs 23.1 to 26 default to 8
+#+END_SRC
+
+** Tab widh
+#+BEGIN_SRC emacs-lisp
+(setq tab-width 4)
+#+END_SRC
+
+** Backup
+#+BEGIN_SRC emacs-lisp
+(setq backup-inhibited t)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+;; Don't want any backup files nor autosaving
+(setq make-backup-files        nil)
+(setq auto-save-list-file-name nil)
+(setq auto-save-default        nil)
+#+END_SRC
+* ORG mode configuration
+** Org mode export config
+#+BEGIN_SRC emacs-lisp
+; (defun org-set-ascii-text-width ()
+;   (save-excursion (setq org-ascii-text-width
+;                         (cadr (goto-longest-line (point-min) (point-max))))))
+(setq org-ascii-text-width 10000)
+#+END_SRC
+** Org mode for all *.org files
+#+BEGIN_SRC emacs-lisp
+(require 'org)
+(add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
+#+END_SRC
+
+** Org-mode bullets
+#+BEGIN_SRC emacs-lisp
+(use-package org
+  :hook ((org-mode . visual-line-mode)
+         (org-mode . org-indent-mode)))
+(use-package org-bullets
+  :ensure t
+  :hook (org-mode . org-bullets-mode))
+#+END_SRC
+
+** Markdonw export
+#+BEGIN_SRC emacs-lisp
+;; markdonw exporter in org-mode
+;; (add-to-list 'load-path
+;;              "~/.emacs.d/ox-gfm")
+(use-package ox-gfm
+  :ensure t)
+(eval-after-load "org"
+  '(require 'ox-gfm nil t))
+#+END_SRC
+
+** Color Highligth Code Block org-mode
+#+BEGIN_SRC emacs-lisp
+(setq org-src-fontify-natively t
+      org-src-tab-acts-natively t
+      org-confirm-babel-evaluate nil
+      org-edit-src-content-indentation 0)
+#+END_SRC
+
+* Themes
+** Gruvbox
+#+BEGIN_SRC emacs-lisp
+;; gruvbox theme
+;; user-init
+;; (load-file "~/.emacs.d/dash/dash.el")
+;;(load-file "~/.emacs.d/autothemer/autothemer.el")
+(use-package dash
+  :ensure t)
+(use-package autothemer
+  :ensure t)
+(use-package gruvbox-theme
+  :ensure t
+  :config (load-theme 'gruvbox-dark-soft t))
+;; (load-theme 'gruvbox-dark-soft t)
+#+END_SRC
+
+** Syntax highlights
+*** dockerfile mode
+#+BEGIN_SRC emacs-lisp
+;; (require 'dockerfile-mode)
+(use-package dockerfile-mode
+  :ensure t)
+(add-to-list 'auto-mode-alist '("Dockerfile\\'" . dockerfile-mode))
+#+END_SRC
+
+*** docker-compose mode
+#+BEGIN_SRC emacs-lisp
+;;(require 'docker-compose-mode)
+(use-package docker-compose-mode
+  :ensure t)
+#+END_SRC
+
+* Navigation
+** Selection behaviour
+Replace the active region just by typing text, just like modern editors
+#+BEGIN_SRC emacs-lisp
+  (use-package delsel
+    :ensure t
+    :config (delete-selection-mode +1))
+#+END_SRC
+** Scroll
+#+BEGIN_SRC emacs-lisp
+;; scroll one line at a time (less "jumpy" than defaults)
+(setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; one line at a time
+(setq mouse-wheel-progressive-speed nil) ;; don't accelerate scrolling
+(setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
+(setq scroll-step 1) ;; keyboard scroll one line at a time
+#+END_SRC
+
+** keybindings
+*** Delete full line *ctrl+d*
+#+BEGIN_SRC emacs-lisp
+;; keybinding to delete full line
+(global-set-key (kbd "C-d") 'kill-whole-line)
+#+END_SRC
+*** Comment line *ctrl+7*
+#+BEGIN_SRC emacs-lisp
+;; keybinding to comment out line
+(global-set-key (kbd "C-7") 'comment-line)
+#+END_SRC
+*** Move between panes
+#+BEGIN_SRC emacs-lisp
+;; Add shift-arrow key binding to swich between windows
+(windmove-default-keybindings 'meta)
+#+END_SRC
+
+*** Tabbar
+#+BEGIN_SRC emacs-lisp
+;; tabbar
+;; (require 'tabbar)
+(use-package tabbar
+  :ensure t)
+(tabbar-mode t)
+(global-set-key [M-S-left] 'tabbar-backward-tab)
+(global-set-key [M-S-right] 'tabbar-forward-tab)
+#+END_SRC
+
+** Searching/sorting enhancements & project management
+*** Ido, ido-vertical, ido-ubiquitous and fuzzy matching
+Selecting buffers/files with great efficiency. In my opinion, Ido is enough to replace Ivy/Counsel and Helm. We install ido-vertical to get a better view of the available options (use ~C-n~, ~C-p~ or arrow keys to navigate). Ido-ubiquitous (from the ~ido-completing-read+~ package) provides us ido-like completions in describing functions and variables etc. Fuzzy matching is a nice feature and we have flx-ido for that purpose.
+#+BEGIN_SRC emacs-lisp
+(use-package ivy
+  :ensure t
+  :config (ivy-mode 1))
+
+(use-package counsel
+  :after ivy
+  :config (counsel-mode))
+
+;; (use-package ivy
+;;   :defer 0.1
+;;   :diminish
+;;   :bind (("C-c C-r" . ivy-resume)
+;;          ("C-x B" . ivy-switch-buffer-other-window))
+;;   :custom
+;;   (ivy-count-format "(%d/%d) ")
+;;   (ivy-use-virtual-buffers t)
+;;   :config (ivy-mode))
+
+(use-package ivy-rich
+  :after ivy
+  :custom
+  (ivy-virtual-abbreviate 'full
+                          ivy-rich-switch-buffer-align-virtual-buffer t
+                          ivy-rich-path-style 'abbrev)
+  :config
+  (ivy-set-display-transformer 'ivy-switch-buffer
+                               'ivy-rich-switch-buffer-transformer))
+
+;;(use-package swiper
+;;  :after ivy
+;;  :bind (("C-s" . swiper)
+;;         ("C-r" . swiper)))
+;;  (use-package ido
+;;    :config
+;;    (ido-mode +1)
+;;    (setq ido-everywhere t
+;;          ido-enable-flex-matching t))
+;;
+;;  (use-package ido-vertical-mode
+;;    :config
+;;    (ido-vertical-mode +1)
+;;    (setq ido-vertical-define-keys 'C-n-C-p-up-and-down))
+;;
+;;  (use-package ido-completing-read+ :config (ido-ubiquitous-mode +1))
+;;
+;;  (use-package flx-ido :config (flx-ido-mode +1))
+#+END_SRC
+
+* Miscellaneous
+** Clean up whitespace on save
+#+BEGIN_SRC emacs-lisp
+  (use-package whitespace
+    :ensure nil
+    :hook (before-save . whitespace-cleanup))
+#+END_SRC
+** NeoTree
+#+BEGIN_SRC emacs-lisp
+;; (require 'neotree)
+(use-package neotree
+  :ensure t)
+(global-set-key [f8] 'neotree-toggle)
+(global-hl-line-mode +1)
+#+END_SRC
+** Multiple cursor
+#+BEGIN_SRC emacs-lisp
+;;(add-to-list 'load-path
+;;             "~/.emacs.d/multiple-cursors.el")
+;; (require 'multiple-cursors)
+(use-package multiple-cursors
+  :ensure t)
+(global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
+#+END_SRC
+** Show matching parentheses
+Reduce the highlight delay to instantly.
+#+BEGIN_SRC emacs-lisp
+  (use-package paren
+    :ensure nil
+    :init (setq show-paren-delay 0)
+    :config (show-paren-mode +1))
+#+END_SRC
+** Autopair mode
+Electric-pair-mode has improved quite a bit in recent Emacs versions. No longer need an extra package for this. It also takes care of the new-line-and-push-brace feature.
+#+BEGIN_SRC emacs-lisp
+  (use-package elec-pair
+    :ensure nil
+    :hook (prog-mode . electric-pair-mode))
+#+END_SRC
+#+BEGIN_SRC emacs-lisp
+;; autopair mode
+;;(require 'autopair)
+;;(autopair-global-mode 1)
+#+END_SRC
+** Fill column indicator
+#+BEGIN_SRC emacs-lisp
+;; (add-to-list 'load-path "~/.emacs.d/fill-column-indicator/")
+;; (require 'fill-column-indicator)
+(use-package fill-column-indicator
+  :ensure t)
+(define-globalized-minor-mode global-fci-mode fci-mode (lambda () (fci-mode 1)))
+  (global-fci-mode 1)
+(setq fci-rule-column 80)
+#+END_SRC
+# ** yasnippet
+#+BEGIN_SRC emacs-lisp
+;; (require 'yasnippet)
+;; (yas-global-mode 1)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+;;; use popup menu for yas-choose-value
+;; (require 'popup)
+;; (use-package popup
+;;   :ensure t)
+
+;; ;; add some shotcuts in popup menu mode
+;; (define-key popup-menu-keymap (kbd "M-n") 'popup-next)
+;; (define-key popup-menu-keymap (kbd "TAB") 'popup-next)
+;; (define-key popup-menu-keymap (kbd "<tab>") 'popup-next)
+;; (define-key popup-menu-keymap (kbd "<backtab>") 'popup-previous)
+;; (define-key popup-menu-keymap (kbd "M-p") 'popup-previous)
+;;
+;; (defun yas-popup-isearch-prompt (prompt choices &optional display-fn)
+;;   (when (featurep 'popup)
+;;     (popup-menu*
+;;      (mapcar
+;;       (lambda (choice)
+;;         (popup-make-item
+;;          (or (and display-fn (funcall display-fn choice))
+;;              choice)
+;;          :value choice))
+;;       choices)
+;;      :prompt prompt
+;;      ;; start isearch mode immediately
+;;      :isearch t
+;;      )))
+;;
+;; (setq yas-prompt-functions '(yas-popup-isearch-prompt yas-maybe-ido-prompt yas-completing-prompt yas-no-prompt))
+#+END_SRC
+** Programming language support and utilities
+*** Company for auto-completion
+Use ~C-n~ and ~C-p~ to navigate the tooltip.
+#+BEGIN_SRC emacs-lisp
+  (use-package company
+    :diminish company-mode
+    :hook (prog-mode . company-mode)
+    :config
+    (setq company-minimum-prefix-length 1
+          company-idle-delay 0.1
+          company-selection-wrap-around t
+          company-tooltip-align-annotations t
+          company-frontends '(company-pseudo-tooltip-frontend ; show tooltip even for single candidate
+                              company-echo-metadata-frontend))
+    (with-eval-after-load 'company
+      (define-key company-active-map (kbd "C-n") 'company-select-next)
+      (define-key company-active-map (kbd "C-p") 'company-select-previous)))
+#+END_SRC
+*** Flycheck
+A modern on-the-fly syntax checking extension -- absolute essential
+#+BEGIN_SRC emacs-lisp
+  (use-package flycheck :config (global-flycheck-mode +1))
+#+END_SRC
+*** Org Mode
+Some minimal org mode tweaks: org-bullets gives our headings (h1, h2, h3...) a more visually pleasing look.
+#+BEGIN_SRC emacs-lisp
+  (use-package org
+    :hook ((org-mode . visual-line-mode)
+           (org-mode . org-indent-mode)))
+
+  (use-package org-bullets :hook (org-mode . org-bullets-mode))
+#+END_SRC
+*** Yasnippet & yasnippet-snippets
+Use TAB to expand snippets. The code snippet below also avoids clashing with company-mode.
+#+BEGIN_SRC emacs-lisp
+  (use-package yasnippet-snippets
+    :config
+    (yas-global-mode +1)
+    (advice-add 'company-complete-common
+                :before
+                (lambda ()
+                  (setq my-company-point (point))))
+    (advice-add 'company-complete-common
+                :after
+                (lambda ()
+                  (when (equal my-company-point (point))
+                    (yas-expand)))))
+#+END_SRC
+*** Useful major modes
+Markdown mode and JSON mode
+#+BEGIN_SRC emacs-lisp
+  (use-package markdown-mode :hook (markdown-mode . visual-line-mode))
+
+  (use-package json-mode)
+#+END_SRC

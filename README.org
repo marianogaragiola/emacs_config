@@ -1,0 +1,17 @@
+* emacs configuration
+
+This is my emacs configuration
+
+** Installation
+Back up you ~\~/.emacs.d/~ first:
+
+#+BEGIN_SRC sh
+$ mv ~/.emacs.d ~/emacs_back_up
+#+END_SRC
+
+Clone the repository as the new ~\~/.emacs.d/~:
+#+BEGIN_SRC sh
+$ git clone https://github.com/marianogaragiola/emacs_config.git ~/.emacs.d
+#+END_SRC
+
+Open ~emacs~ and wait until the installation is finished.
