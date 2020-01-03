@@ -341,20 +341,17 @@ A modern on-the-fly syntax checking extension -- absolute essential
 #+BEGIN_SRC emacs-lisp
   (use-package flycheck :config (global-flycheck-mode +1))
 #+END_SRC
-*** Org Mode
-Some minimal org mode tweaks: org-bullets gives our headings (h1, h2, h3...) a more visually pleasing look.
-#+BEGIN_SRC emacs-lisp
-  (use-package org
-    :hook ((org-mode . visual-line-mode)
-           (org-mode . org-indent-mode)))
-
-  (use-package org-bullets :hook (org-mode . org-bullets-mode))
-#+END_SRC
 *** Yasnippet & yasnippet-snippets
 Use TAB to expand snippets. The code snippet below also avoids clashing with company-mode.
 #+BEGIN_SRC emacs-lisp
+  (use-package yasnippet
+    :ensure t
+    :defer 1
+    :diminish yas-minor-mode
+    :config (yas-global-mode))
   (use-package yasnippet-snippets
     :config
+    (yasnippet-snippets-initialize)
     (yas-global-mode +1)
     (advice-add 'company-complete-common
                 :before
