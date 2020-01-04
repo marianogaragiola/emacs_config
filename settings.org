@@ -188,15 +188,15 @@ Selecting buffers/files with great efficiency. In my opinion, Ido is enough to r
   :after ivy
   :config (counsel-mode))
 
-;; (use-package ivy
-;;   :defer 0.1
-;;   :diminish
-;;   :bind (("C-c C-r" . ivy-resume)
-;;          ("C-x B" . ivy-switch-buffer-other-window))
-;;   :custom
-;;   (ivy-count-format "(%d/%d) ")
-;;   (ivy-use-virtual-buffers t)
-;;   :config (ivy-mode))
+(use-package ivy
+  :defer 0.1
+  :diminish
+  :bind (("C-c C-r" . ivy-resume)
+         ("C-x B" . ivy-switch-buffer-other-window))
+  :custom
+  (ivy-count-format "(%d/%d) ")
+  (ivy-use-virtual-buffers t)
+  :config (ivy-mode))
 
 (use-package ivy-rich
   :after ivy
@@ -208,24 +208,23 @@ Selecting buffers/files with great efficiency. In my opinion, Ido is enough to r
   (ivy-set-display-transformer 'ivy-switch-buffer
                                'ivy-rich-switch-buffer-transformer))
 
-;;(use-package swiper
-;;  :after ivy
-;;  :bind (("C-s" . swiper)
-;;         ("C-r" . swiper)))
-;;  (use-package ido
-;;    :config
-;;    (ido-mode +1)
-;;    (setq ido-everywhere t
-;;          ido-enable-flex-matching t))
-;;
-;;  (use-package ido-vertical-mode
-;;    :config
-;;    (ido-vertical-mode +1)
-;;    (setq ido-vertical-define-keys 'C-n-C-p-up-and-down))
-;;
-;;  (use-package ido-completing-read+ :config (ido-ubiquitous-mode +1))
-;;
-;;  (use-package flx-ido :config (flx-ido-mode +1))
+(use-package swiper
+  :after ivy
+  :bind (("C-s" . swiper)
+         ("C-r" . swiper)))
+
+(use-package posframe
+  :ensure t)
+(use-package ivy-posframe
+  :ensure t
+  :config
+    (setq ivy-posframe-min-width 90
+          ivy-posframe-width 110)
+    (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-top-center)))
+    (ivy-posframe-enable))
+    (setq ivy-posframe-parameters
+     '((left-fringe . 8)
+      (right-fringe . 8)))
 #+END_SRC
 
 * Miscellaneous
