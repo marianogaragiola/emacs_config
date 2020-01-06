@@ -1,13 +1,11 @@
 * Basic Configuration for Emacs
-
 ** Variable Initializer
 #+BEGIN_SRC emacs-lisp
   (use-package "startup"
     :ensure nil
     :config (setq inhibit-startup-screen t))
-;; (package-initialize)
 
-;; (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
 
 (setq package-check-signature nil)
 
@@ -177,8 +175,7 @@ Replace the active region just by typing text, just like modern editors
 #+END_SRC
 
 ** Searching/sorting enhancements & project management
-*** Ido, ido-vertical, ido-ubiquitous and fuzzy matching
-Selecting buffers/files with great efficiency. In my opinion, Ido is enough to replace Ivy/Counsel and Helm. We install ido-vertical to get a better view of the available options (use ~C-n~, ~C-p~ or arrow keys to navigate). Ido-ubiquitous (from the ~ido-completing-read+~ package) provides us ido-like completions in describing functions and variables etc. Fuzzy matching is a nice feature and we have flx-ido for that purpose.
+*** ivy mode/ivy-frame and swiper
 #+BEGIN_SRC emacs-lisp
 (use-package ivy
   :ensure t
@@ -224,7 +221,7 @@ Selecting buffers/files with great efficiency. In my opinion, Ido is enough to r
     (ivy-posframe-enable))
     (setq ivy-posframe-parameters
      '((left-fringe . 8)
-      (right-fringe . 8)))
+       (right-fringe . 8)))
 #+END_SRC
 
 * Miscellaneous
