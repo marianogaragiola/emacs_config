@@ -37,6 +37,7 @@
 ** Custom Variables
 #+BEGIN_SRC emacs-lisp
 (set-face-attribute 'default nil :height 130)
+
 (tool-bar-mode -1)
 (menu-bar-mode -1)
 (set-default 'truncate-lines t)
@@ -68,6 +69,16 @@
 (setq make-backup-files        nil)
 (setq auto-save-list-file-name nil)
 (setq auto-save-default        nil)
+#+END_SRC
+** Scrolling experience
+#+BEGIN_SRC emacs-lisp
+(setq scroll-margin 0
+          scroll-conservatively 10000
+          scroll-preserve-screen-position t
+          auto-window-vscroll nil)
+
+    ;; increase line space for better readability
+(setq-default line-spacing 2)
 #+END_SRC
 * ORG mode configuration
 ** Org mode export config
@@ -115,10 +126,6 @@
 * Themes
 ** Gruvbox
 #+BEGIN_SRC emacs-lisp
-;; gruvbox theme
-;; user-init
-;; (load-file "~/.emacs.d/dash/dash.el")
-;;(load-file "~/.emacs.d/autothemer/autothemer.el")
 (use-package dash
   :ensure t)
 (use-package autothemer
@@ -132,7 +139,6 @@
 ** Syntax highlights
 *** dockerfile mode
 #+BEGIN_SRC emacs-lisp
-;; (require 'dockerfile-mode)
 (use-package dockerfile-mode
   :ensure t)
 (add-to-list 'auto-mode-alist '("Dockerfile\\'" . dockerfile-mode))
@@ -140,7 +146,6 @@
 
 *** docker-compose mode
 #+BEGIN_SRC emacs-lisp
-;;(require 'docker-compose-mode)
 (use-package docker-compose-mode
   :ensure t)
 #+END_SRC
@@ -182,13 +187,9 @@ Replace the active region just by typing text, just like modern editors
 ** Tabbar
 #+BEGIN_SRC emacs-lisp
 ;; tabbar
-;; (require 'tabbar)
 (use-package tabbar
   :ensure t)
 (tabbar-mode t)
-;; (setq tabbar-buffer-groups-function
-;;              (lambda ()
-;;                (list "All")))
 (global-set-key [M-S-left] 'tabbar-backward-tab)
 (global-set-key [M-S-right] 'tabbar-forward-tab)
 #+END_SRC
@@ -312,7 +313,6 @@ Replace the active region just by typing text, just like modern editors
 #+END_SRC
 ** NeoTree
 #+BEGIN_SRC emacs-lisp
-;; (require 'neotree)
 (use-package neotree
   :ensure t)
 (global-set-key [f8] 'neotree-toggle)
@@ -320,9 +320,6 @@ Replace the active region just by typing text, just like modern editors
 #+END_SRC
 ** Multiple cursor
 #+BEGIN_SRC emacs-lisp
-;;(add-to-list 'load-path
-;;             "~/.emacs.d/multiple-cursors.el")
-;; (require 'multiple-cursors)
 (use-package multiple-cursors
   :ensure t)
 (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
@@ -343,56 +340,16 @@ Electric-pair-mode has improved quite a bit in recent Emacs versions. No longer 
     :hook (prog-mode . electric-pair-mode))
 #+END_SRC
 #+BEGIN_SRC emacs-lisp
-;; autopair mode
-;;(require 'autopair)
-;;(autopair-global-mode 1)
 #+END_SRC
 ** Fill column indicator
 #+BEGIN_SRC emacs-lisp
-;; (add-to-list 'load-path "~/.emacs.d/fill-column-indicator/")
-;; (require 'fill-column-indicator)
 (use-package fill-column-indicator
   :ensure t)
 (define-globalized-minor-mode global-fci-mode fci-mode (lambda () (fci-mode 1)))
   (global-fci-mode 1)
 (setq fci-rule-column 80)
 #+END_SRC
-# ** yasnippet
-#+BEGIN_SRC emacs-lisp
-;; (require 'yasnippet)
-;; (yas-global-mode 1)
-#+END_SRC
 
-#+BEGIN_SRC emacs-lisp
-;;; use popup menu for yas-choose-value
-;; (require 'popup)
-;; (use-package popup
-;;   :ensure t)
-
-;; ;; add some shotcuts in popup menu mode
-;; (define-key popup-menu-keymap (kbd "M-n") 'popup-next)
-;; (define-key popup-menu-keymap (kbd "TAB") 'popup-next)
-;; (define-key popup-menu-keymap (kbd "<tab>") 'popup-next)
-;; (define-key popup-menu-keymap (kbd "<backtab>") 'popup-previous)
-;; (define-key popup-menu-keymap (kbd "M-p") 'popup-previous)
-;;
-;; (defun yas-popup-isearch-prompt (prompt choices &optional display-fn)
-;;   (when (featurep 'popup)
-;;     (popup-menu*
-;;      (mapcar
-;;       (lambda (choice)
-;;         (popup-make-item
-;;          (or (and display-fn (funcall display-fn choice))
-;;              choice)
-;;          :value choice))
-;;       choices)
-;;      :prompt prompt
-;;      ;; start isearch mode immediately
-;;      :isearch t
-;;      )))
-;;
-;; (setq yas-prompt-functions '(yas-popup-isearch-prompt yas-maybe-ido-prompt yas-completing-prompt yas-no-prompt))
-#+END_SRC
 ** Programming language support and utilities
 *** Company for auto-completion
 Use ~C-n~ and ~C-p~ to navigate the tooltip.
@@ -414,7 +371,7 @@ Use ~C-n~ and ~C-p~ to navigate the tooltip.
 *** Flycheck
 A modern on-the-fly syntax checking extension -- absolute essential
 #+BEGIN_SRC emacs-lisp
-  (use-package flycheck :config (global-flycheck-mode +1))
+;;  (use-package flycheck :config (global-flycheck-mode +1))
 #+END_SRC
 *** Yasnippet & yasnippet-snippets
 Use TAB to expand snippets. The code snippet below also avoids clashing with company-mode.
