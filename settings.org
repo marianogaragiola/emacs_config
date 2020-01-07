@@ -1,9 +1,24 @@
 * Basic Configuration for Emacs
 ** Variable Initializer
 #+BEGIN_SRC emacs-lisp
-  (use-package "startup"
-    :ensure nil
-    :config (setq inhibit-startup-screen t))
+(use-package "startup"
+  :ensure nil
+  :config (setq inhibit-startup-screen t)
+          (setq inhibit-startup-message t)
+          ;; Display this instead of "For information about GNU Emacs and the
+          ;; GNU system, type C-h C-a.". This has been made intentionally hard
+          ;; to customize in GNU Emacs so I have to resort to hackery.
+          (defun display-startup-echo-area-message ()
+            "If it wasn't for this you'd be GNU/Spammed by now"
+            (message ""))
+
+          ;; Don't insert instructions in the *scratch* buffer
+          (setq initial-scratch-message nil)
+          (setq initial-buffer-choice "~/")
+)
+(kill-buffer "*scratch*")
+
+
 
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
@@ -171,9 +186,9 @@ Replace the active region just by typing text, just like modern editors
 (use-package tabbar
   :ensure t)
 (tabbar-mode t)
-(setq tabbar-buffer-groups-function
-             (lambda ()
-               (list "All")))
+;; (setq tabbar-buffer-groups-function
+;;              (lambda ()
+;;                (list "All")))
 (global-set-key [M-S-left] 'tabbar-backward-tab)
 (global-set-key [M-S-right] 'tabbar-forward-tab)
 #+END_SRC
