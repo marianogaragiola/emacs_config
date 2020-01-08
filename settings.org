@@ -303,6 +303,11 @@ Replace the active region just by typing text, just like modern editors
      '((left-fringe . 8)
        (right-fringe . 8)))
 #+END_SRC
+Using iedit to search-replace
+#+BEGIN_SRC emacs-lisp
+(use-package iedit
+  :ensure t)
+#+END_SRC
 
 * Miscellaneous
 ** Clean up whitespace on save
