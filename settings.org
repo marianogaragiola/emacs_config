@@ -398,7 +398,15 @@ Use TAB to expand snippets. The code snippet below also avoids clashing with com
 *** Useful major modes
 Markdown mode and JSON mode
 #+BEGIN_SRC emacs-lisp
-  (use-package markdown-mode :hook (markdown-mode . visual-line-mode))
+  ;; (use-package markdown-mode :hook (markdown-mode . visual-line-mode))
+  (use-package markdown-mode
+    :init
+    :config
+    (setq markdown-xhtml-header-content "<meta http-equiv='Content-Type' content='text/html; charset=utf-8' />")
+    :mode "\\.md\\'"
+    :ensure t)
 
-  (use-package json-mode)
+  (use-package json-mode
+    :mode "\\.json\\'"
+    :ensure t)
 #+END_SRC
