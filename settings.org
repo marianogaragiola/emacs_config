@@ -36,7 +36,7 @@
 
 ** Custom Variables
 #+BEGIN_SRC emacs-lisp
-(set-face-attribute 'default nil :height 130)
+(set-face-attribute 'default nil :height 140)
 
 (tool-bar-mode -1)
 (menu-bar-mode -1)
@@ -416,4 +416,11 @@ Markdown mode and JSON mode
   (use-package json-mode
     :mode "\\.json\\'"
     :ensure t)
+#+END_SRC
+*** Diff-hl
+#+BEGIN_SRC emacs-lisp
+(use-package diff-hl
+  :ensure t)
+(global-diff-hl-mode)
+(global-diff-flydiff-mode)
 #+END_SRC
