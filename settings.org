@@ -18,8 +18,6 @@
 )
 (kill-buffer "*scratch*")
 
-
-
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
 (setq package-check-signature nil)
@@ -36,10 +34,11 @@
 
 ** Custom Variables
 #+BEGIN_SRC emacs-lisp
-(set-face-attribute 'default nil :height 140)
+(set-face-attribute 'default nil :height 130)
 
 (tool-bar-mode -1)
 (menu-bar-mode -1)
+(scroll-bar-mode -1)
 (set-default 'truncate-lines t)
 (global-linum-mode t)
 (column-number-mode 1)
@@ -422,5 +421,11 @@ Markdown mode and JSON mode
 (use-package diff-hl
   :ensure t)
 (global-diff-hl-mode)
-(global-diff-flydiff-mode)
+#+END_SRC
+*** Highlight indentation
+#+BEGIN_SRC emacs-lisp
+(use-package highlight-indentation
+  :ensure t)
+(add-hook 'prog-mode-hook 'highlight-indentation-mode)
+;; (highlight-indentation-mode +1)
 #+END_SRC
