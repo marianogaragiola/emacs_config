@@ -427,5 +427,17 @@ Markdown mode and JSON mode
 (use-package highlight-indentation
   :ensure t)
 (add-hook 'prog-mode-hook 'highlight-indentation-mode)
-;; (highlight-indentation-mode +1)
+#+END_SRC
+*** Yafolding
+#+BEGIN_SRC emacs-lisp
+(use-package yafolding
+  :ensure t
+  :hook (prog-mode . yafolding-mode))
+;; (add-hook 'prog-mode-hook 'yasfolding-mode)
+(defvar yafolding-mode-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map (kbd "<C-S-return>") #'yafolding-hide-parent-element)
+    (define-key map (kbd "<C-M-return>") #'yafolding-toggle-all)
+    (define-key map (kbd "<C-return>") #'yafolding-toggle-element)
+    map))
 #+END_SRC
