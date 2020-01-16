@@ -392,7 +392,24 @@ Use ~C-n~ and ~C-p~ to navigate the tooltip.
 *** Flycheck
 A modern on-the-fly syntax checking extension -- absolute essential
 #+BEGIN_SRC emacs-lisp
+(use-package flycheck
+  :ensure t
+  :config (global-flycheck-mode))
 ;;  (use-package flycheck :config (global-flycheck-mode +1))
+#+END_SRC
+#+BEGIN_SRC emacs-lisp
+(use-package flycheck
+  :config
+    ;; (setq flycheck-global-modes '(python-mode))
+    ;; (gloabal-flycheck-mode)
+    (add-hook 'after-init-hook #'global-flycheck-mode)
+    ;; (spc-map
+    ;;     "i" '(nill :which-key "flycheck prefix")
+    ;;     "in" 'flycheck-next-erro
+    ;;     "ip" 'flycheck-previous-error
+    ;;     "il" 'flycheck-list-errors)
+  :diminish flycheck-mode
+  :ensure t)
 #+END_SRC
 *** Yasnippet & yasnippet-snippets
 Use TAB to expand snippets. The code snippet below also avoids clashing with company-mode.
