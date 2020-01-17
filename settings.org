@@ -134,6 +134,12 @@
   :config (load-theme 'gruvbox-dark-soft t))
 ;; (load-theme 'gruvbox-dark-soft t)
 #+END_SRC
+** Atom One Dark Theme
+#+BEGIN_SRC emacs-lisp
+;; (use-package atom-one-dark-theme
+;;   :ensure t
+;;   :config (load-theme 'atom-one-dark t))
+#+END_SRC
 
 ** Syntax highlights
 *** dockerfile mode
@@ -266,6 +272,41 @@ Replace the active region just by typing text, just like modern editors
 ;; Key sequences "C-S-PgUp" and "C-S-PgDn" move the current tab to the left and to the right.
 (global-set-key (kbd "C-S-<prior>") 'tabbar-move-current-tab-one-place-left)
 (global-set-key (kbd "C-S-<next>") 'tabbar-move-current-tab-one-place-right)
+#+END_SRC
+** centaur-tabs
+#+BEGIN_SRC emacs-lisp
+;; (use-package centaur-tabs
+;;   :ensure t
+;;   :demand
+;;   :config
+;;     (centaur-tabs-mode t)
+;;     (setq centaur-tabs-style "bar")
+;;     (setq centaur-tabs-set-icons t)
+;;     (setq centaur-tabs-set-modified-marker t)
+;;     (setq centaur-tabs-set-modified-marker "°")
+;;     (setq centaur-tabs-set-bar 'over)
+;;     (setq centaur-tabs-close-buttom "X")
+;;   :bind
+;;   ("C-S-<prior>" . centaur-tabs-backward)
+;;   ("C-S-<next>" . centaur-tabs-forward))
+#+END_SRC
+** Awesome-tab
+#+BEGIN_SRC emacs-lisp
+;; (add-to-list 'load-path (expand-file-name "~/.emacs.d/awesome-tab"))
+;; (require 'awesome-tab)
+;; (awesome-tab-mode t)
+;; (global-set-key (kbd "M-S-<left>") 'awesome-tab-backward-tab)
+;; (global-set-key (kbd "M-S-<right>") 'awesome-tab-forward-tab)
+;; (global-set-key (kbd "s-1") 'awesome-tab-select-visible-tab)
+;; (global-set-key (kbd "s-2") 'awesome-tab-select-visible-tab)
+;; (global-set-key (kbd "s-3") 'awesome-tab-select-visible-tab)
+;; (global-set-key (kbd "s-4") 'awesome-tab-select-visible-tab)
+;; (global-set-key (kbd "s-5") 'awesome-tab-select-visible-tab)
+;; (global-set-key (kbd "s-6") 'awesome-tab-select-visible-tab)
+;; (global-set-key (kbd "s-7") 'awesome-tab-select-visible-tab)
+;; (global-set-key (kbd "s-8") 'awesome-tab-select-visible-tab)
+;; (global-set-key (kbd "s-9") 'awesome-tab-select-visible-tab)
+;; (global-set-key (kbd "s-0") 'awesome-tab-select-visible-tab)
 #+END_SRC
 
 ** Searching/sorting enhancements & project management
