@@ -13,10 +13,10 @@
             (message ""))
 
           ;; Don't insert instructions in the *scratch* buffer
-          (setq initial-scratch-message nil)
-          (setq initial-buffer-choice "~/")
+          ;; (setq initial-scratch-message nil)
+          ;; (setq initial-buffer-choice "~/")
 )
-(kill-buffer "*scratch*")
+;; (kill-buffer "*scratch*")
 
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
@@ -34,7 +34,7 @@
 
 ** Custom Variables
 #+BEGIN_SRC emacs-lisp
-(set-face-attribute 'default nil :height 140)
+(set-face-attribute 'default nil :height 120)
 
 (tool-bar-mode -1)
 (menu-bar-mode -1)
@@ -51,6 +51,8 @@
 ;; set default tab char's display width to 4 spaces
 (setq-default tab-width 4) ; emacs 23.1 to 26 default to 8
 (setq-default line-spacing 2)
+(global-unset-key [(control z)])
+(global-unset-key [(control x)(control z)])
 #+END_SRC
 
 ** Tab widh
@@ -183,6 +185,11 @@ Replace the active region just by typing text, just like modern editors
 ;; keybinding to comment out line
 (global-set-key (kbd "C-7") 'comment-line)
 #+END_SRC
+*** Undo and redo
+#+BEGIN_SRC emacs-lisp
+;; (global-unset-key (kbd "C-z"))
+(global-set-key [(control z)] 'undo)
+#+END_SRC
 *** Move between panes
 #+BEGIN_SRC emacs-lisp
 ;; Add shift-arrow key binding to swich between windows
@@ -275,40 +282,27 @@ Replace the active region just by typing text, just like modern editors
 #+END_SRC
 ** centaur-tabs
 #+BEGIN_SRC emacs-lisp
-;; (use-package centaur-tabs
-;;   :ensure t
-;;   :demand
-;;   :config
-;;     (centaur-tabs-mode t)
-;;     (setq centaur-tabs-style "bar")
-;;     (setq centaur-tabs-set-icons t)
-;;     (setq centaur-tabs-set-modified-marker t)
-;;     (setq centaur-tabs-set-modified-marker "°")
-;;     (setq centaur-tabs-set-bar 'over)
-;;     (setq centaur-tabs-close-buttom "X")
-;;   :bind
-;;   ("C-S-<prior>" . centaur-tabs-backward)
-;;   ("C-S-<next>" . centaur-tabs-forward))
-#+END_SRC
-** Awesome-tab
-#+BEGIN_SRC emacs-lisp
-;; (add-to-list 'load-path (expand-file-name "~/.emacs.d/awesome-tab"))
-;; (require 'awesome-tab)
-;; (awesome-tab-mode t)
-;; (global-set-key (kbd "M-S-<left>") 'awesome-tab-backward-tab)
-;; (global-set-key (kbd "M-S-<right>") 'awesome-tab-forward-tab)
-;; (global-set-key (kbd "s-1") 'awesome-tab-select-visible-tab)
-;; (global-set-key (kbd "s-2") 'awesome-tab-select-visible-tab)
-;; (global-set-key (kbd "s-3") 'awesome-tab-select-visible-tab)
-;; (global-set-key (kbd "s-4") 'awesome-tab-select-visible-tab)
-;; (global-set-key (kbd "s-5") 'awesome-tab-select-visible-tab)
-;; (global-set-key (kbd "s-6") 'awesome-tab-select-visible-tab)
-;; (global-set-key (kbd "s-7") 'awesome-tab-select-visible-tab)
-;; (global-set-key (kbd "s-8") 'awesome-tab-select-visible-tab)
-;; (global-set-key (kbd "s-9") 'awesome-tab-select-visible-tab)
-;; (global-set-key (kbd "s-0") 'awesome-tab-select-visible-tab)
-#+END_SRC
+(use-package centaur-tabs
+  :ensure t
+  :demand
+  :config
+    (centaur-tabs-mode t)
+    (setq centaur-tabs-style "bar")
+    (setq centaur-tabs-set-icons t)
+    (setq centaur-tabs-set-modified-marker t)
+    (setq centaur-tabs-set-modified-marker "°")
+    (setq centaur-tabs-set-bar 'under)
+    (setq centaur-tabs-close-buttom "X")
+    (setq centaur-tabs-cycle-scope 'tabs)
+    (centaur-tabs-group-by-projectile-project)
 
+  :bind
+  ("M-S-<left>" . centaur-tabs-backward)
+  ("M-S-<right>" . centaur-tabs-forward)
+  ("M-S-<up>" . centaur-tabs-move-current-tab-to-left)
+  ("M-S-<down>" . centaur-tabs-move-current-tab-to-right))
+
+#+END_SRC
 ** Searching/sorting enhancements & project management
 *** ivy mode/ivy-frame and swiper
 #+BEGIN_SRC emacs-lisp
@@ -376,7 +370,7 @@ Using iedit to search-replace
 (use-package neotree
   :ensure t)
 (global-set-key [f8] 'neotree-toggle)
-(global-hl-line-mode +1)
+;; (global-hl-line-mode +1)
 #+END_SRC
 ** Multiple cursor
 #+BEGIN_SRC emacs-lisp
@@ -384,7 +378,7 @@ Using iedit to search-replace
   :ensure t)
 (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
 (global-set-key (kbd "C-S-d") 'mc/mark-next-word-like-this)
-(global-set-key (kbd "C-S-f") 'mc/mark-previous-word-like-this)
+(global-set-key (kbd "C-S-x") 'mc/mark-previous-word-like-this)
 #+END_SRC
 ** Show matching parentheses
 Reduce the highlight delay to instantly.
@@ -491,9 +485,14 @@ Markdown mode and JSON mode
 #+END_SRC
 *** Diff-hl
 #+BEGIN_SRC emacs-lisp
-(use-package diff-hl
-  :ensure t)
-(global-diff-hl-mode)
+;; (use-package diff-hl
+;;   :ensure t)
+;; (global-diff-hl-mode)
+#+END_SRC
+*** Highlight
+#+BEGIN_SRC emacs-lisp
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/lisp"))
+(require 'init-highlight)
 #+END_SRC
 *** Highlight indentation
 #+BEGIN_SRC emacs-lisp
@@ -513,4 +512,11 @@ Markdown mode and JSON mode
     (define-key map (kbd "<C-M-return>") #'yafolding-toggle-all)
     (define-key map (kbd "<C-return>") #'yafolding-toggle-element)
     map))
+#+END_SRC
+** Doom-modeline
+#+BEGIN_SRC emacs-lisp
+(use-package doom-modeline
+  :ensure t
+  :hook (after-init . doom-modeline-mode))
+(setq doom-modeline-height 10)
 #+END_SRC

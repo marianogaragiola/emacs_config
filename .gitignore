@@ -1,8 +1,16 @@
-# Ignore everything
-*
-# Except for..
-!.gitignore
-!init.el
-!lisp/*
-!*.org
-!*.md
+# # Ignore everything
+# *
+# lisp/
+# # Except for..
+# !.gitignore
+# !init.el
+# !lisp/*.el
+# !*.org
+# !*.md
+auto-save-list
+elpa
+recentf
+snippets
+.mc-lists.el
+.persistent-scratch
+settings.el
