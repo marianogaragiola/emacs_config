@@ -3,5 +3,6 @@
 # Except for..
 !.gitignore
 !init.el
+!lisp/*
 !*.org
 !*.md
