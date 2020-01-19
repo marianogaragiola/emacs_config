@@ -72,6 +72,15 @@
   (setq venv-location "~/Envs/")
   :hook (venv-workon py3))
 
+(add-hook 'python-mode-hook
+            (lambda ()
+              (setq flycheck-python-pylint-executable "~/Envs/py3/bin/pylint")))
+              ;; (setq flycheck-pylintrc "~/.emacs.d/.pylintrc"))
+;; (add-hook 'python-mode-hook
+;;             (lambda ()
+;;               (setq flycheck-python-flake8-executable "~/Envs/py3/bin/flake8")))
+
+
 (provide 'init-python)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

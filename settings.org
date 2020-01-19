@@ -87,6 +87,8 @@
   (or emacs/>=26p
       (and (= emacs-major-version 25) (>= emacs-minor-version 2)))
   "Emacs is 25.2 or above.")
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/lisp"))
+
 #+END_SRC
 #+BEGIN_SRC emacs-lisp
 (set-face-attribute 'default nil :height 120)
@@ -180,6 +182,9 @@
 #+END_SRC
 
 * Themes
+#+BEGIN_SRC emacs-lisp
+(add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
+#+END_SRC
 ** Gruvbox
 #+BEGIN_SRC emacs-lisp
 (use-package dash
@@ -350,7 +355,7 @@ Replace the active region just by typing text, just like modern editors
     (setq centaur-tabs-close-buttom "X")
     (setq centaur-tabs-cycle-scope 'tabs)
     (centaur-tabs-group-by-projectile-project)
-
+    (centaur-tabs-headline-match)
   :bind
   ("M-S-<left>" . centaur-tabs-backward)
   ("M-S-<right>" . centaur-tabs-forward)
@@ -411,6 +416,12 @@ Using iedit to search-replace
 #+BEGIN_SRC emacs-lisp
 (use-package iedit
   :ensure t)
+#+END_SRC
+
+* Programming language
+** Python-mode
+#+BEGIN_SRC emacs-lisp
+(require 'init-python)
 #+END_SRC
 
 * Miscellaneous
@@ -481,38 +492,40 @@ Use ~C-n~ and ~C-p~ to navigate the tooltip.
 #+END_SRC
 *** Flycheck
 A modern on-the-fly syntax checking extension -- absolute essential
-# #+BEGIN_SRC emacs-lisp
-# (use-package flycheck
-#   :ensure t
-#   :config (global-flycheck-mode))
-# ;;  (use-package flycheck :config (global-flycheck-mode +1))
-# #+END_SRC
-# #+BEGIN_SRC emacs-lisp
-# (use-package flycheck
-#   :config
-#     ;; (setq flycheck-global-modes '(python-mode))
-#     ;; (gloabal-flycheck-mode)
-#     (add-hook 'after-init-hook #'global-flycheck-mode)
-#     ;; (spc-map
-#     ;;     "i" '(nill :which-key "flycheck prefix")
-#     ;;     "in" 'flycheck-next-erro
-#     ;;     "ip" 'flycheck-previous-error
-#     ;;     "il" 'flycheck-list-errors)
-#   :diminish flycheck-mode
-#   :ensure t)
-# #+END_SRC
 #+BEGIN_SRC emacs-lisp
 (use-package flycheck
-  :diminish
-  :hook (after-init . global-flycheck-mode)
+  :ensure t
+  :config (global-flycheck-mode))
+;;  (use-package flycheck :config (global-flycheck-mode +1))
+#+END_SRC
+#+BEGIN_SRC emacs-lisp
+;; (use-package flycheck
+;;   :config
+;;     ;; (setq flycheck-global-modes '(python-mode))
+;;     ;; (gloabal-flycheck-mode)
+;;     (add-hook 'after-init-hook #'global-flycheck-mode)
+;;     ;; (spc-map
+;;     ;;     "i" '(nill :which-key "flycheck prefix")
+;;     ;;     "in" 'flycheck-next-erro
+;;     ;;     "ip" 'flycheck-previous-error
+;;     ;;     "il" 'flycheck-list-errors)
+;;   :diminish flycheck-mode
+;;   :ensure t)
+#+END_SRC
+#+BEGIN_SRC emacs-lisp
+(use-package flycheck
+  :ensure t
+  ;; :diminish
+  ;; :hook (after-init . global-flycheck-mode)
   :config
-  (setq flycheck-emacs-lisp-load-path 'inherit)
+    (global-flycheck-mode)
+  ;; (setq flycheck-emacs-lisp-load-path 'inherit)
 
   ;; Only check while saving and opening files
-  (setq flycheck-check-syntax-automatically '(save mode-enabled))
+  ;; (setq flycheck-check-syntax-automatically '(save mode-enabled))
 
   ;; Set fringe style
-  (setq flycheck-indication-mode 'right-fringe)
+  ;; (setq flycheck-indication-mode 'right-fringe)
   (when (fboundp 'define-fringe-bitmap)
     (define-fringe-bitmap 'flycheck-fringe-bitmap-double-arrow
       [16 48 112 240 112 48 16] nil nil 'center))
@@ -578,7 +591,6 @@ Markdown mode and JSON mode
 #+END_SRC
 *** Highlight
 #+BEGIN_SRC emacs-lisp
-(add-to-list 'load-path (expand-file-name "~/.emacs.d/lisp"))
 (require 'init-highlight)
 #+END_SRC
 *** Highlight indentation
@@ -607,7 +619,9 @@ Markdown mode and JSON mode
   :hook (after-init . doom-modeline-mode))
 (setq doom-modeline-height 10)
 #+END_SRC
-** Python-mode
+** Magit
 #+BEGIN_SRC emacs-lisp
-(require 'init-python)
+(use-package magit
+  :ensure t
+  :diminish magit-mode)
 #+END_SRC
