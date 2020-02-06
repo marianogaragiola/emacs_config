@@ -185,15 +185,21 @@
 #+BEGIN_SRC emacs-lisp
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
 #+END_SRC
+** Doom themes
+#+BEGIN_SRC emacs-lisp
+(use-package doom-themes
+  :ensure t
+  :config (load-theme 'doom-gruvbox t))
+#+END_SRC
 ** Gruvbox
 #+BEGIN_SRC emacs-lisp
 (use-package dash
   :ensure t)
 (use-package autothemer
   :ensure t)
-(use-package gruvbox-theme
-  :ensure t
-  :config (load-theme 'gruvbox-dark-soft t))
+;; (use-package gruvbox-theme
+;;   :ensure t
+;;   :config (load-theme 'gruvbox-dark-soft t))
 ;; (load-theme 'gruvbox-dark-soft t)
 #+END_SRC
 ** Atom One Dark Theme
@@ -430,6 +436,18 @@ Using iedit to search-replace
   (use-package whitespace
     :ensure nil
     :hook (before-save . whitespace-cleanup))
+#+END_SRC
+** Dired tweaks
+Delete intermediate buffers when navigating through dired.
+#+BEGIN_SRC emacs-lips
+(use-package dired
+  :ensure nil
+  :config
+  (setq delete-by-moving-to-trash t)
+  (eval-after-load "dired"
+    #'(lambda ()
+        (put 'dired-find-alternate-file 'disabled nil)
+        (define-key dired-mode-map (kbd "RET") #'dired-find-alternate-file))))
 #+END_SRC
 ** NeoTree
 #+BEGIN_SRC emacs-lisp
