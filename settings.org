@@ -91,13 +91,13 @@
 
 #+END_SRC
 #+BEGIN_SRC emacs-lisp
-(set-face-attribute 'default nil :height 120)
+(set-face-attribute 'default nil :height 110)
 
 (tool-bar-mode -1)
 (menu-bar-mode -1)
 (scroll-bar-mode -1)
 (set-default 'truncate-lines t)
-(global-linum-mode t)
+;; (global-linum-mode t)
 (column-number-mode 1)
 (progn
   ;; make indentation commands use space only (never tab character)
@@ -137,6 +137,18 @@
 
     ;; increase line space for better readability
 (setq-default line-spacing 2)
+#+END_SRC
+* UI
+#+BEGIN_SRC emacs-lisp
+(require 'init-ui)
+#+END_SRC
+* Edit
+#+BEGIN_SRC emacs-lisp
+(require 'init-edit)
+#+END_SRC
+* Highlight
+#+BEGIN_SRC emacs-lisp
+(require 'init-highlight)
 #+END_SRC
 * ORG mode configuration
 ** Org mode export config
@@ -182,33 +194,12 @@
 #+END_SRC
 
 * Themes
-#+BEGIN_SRC emacs-lisp
-(add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
-#+END_SRC
 ** Doom themes
 #+BEGIN_SRC emacs-lisp
-(use-package doom-themes
+    (use-package doom-themes
   :ensure t
   :config (load-theme 'doom-gruvbox t))
 #+END_SRC
-** Gruvbox
-#+BEGIN_SRC emacs-lisp
-(use-package dash
-  :ensure t)
-(use-package autothemer
-  :ensure t)
-;; (use-package gruvbox-theme
-;;   :ensure t
-;;   :config (load-theme 'gruvbox-dark-soft t))
-;; (load-theme 'gruvbox-dark-soft t)
-#+END_SRC
-** Atom One Dark Theme
-#+BEGIN_SRC emacs-lisp
-;; (use-package atom-one-dark-theme
-;;   :ensure t
-;;   :config (load-theme 'atom-one-dark t))
-#+END_SRC
-
 ** Syntax highlights
 *** dockerfile mode
 #+BEGIN_SRC emacs-lisp
@@ -223,6 +214,14 @@
   :ensure t)
 #+END_SRC
 
+* Ivy/Ivy-frame/Swiper/Ivy-posframe
+#+BEGIN_SRC emacs-lisp
+(require 'init-ivy)
+#+END_SRC
+* Tabs: Centaur-tabs
+#+BEGIN_SRC emacs-lisp
+(require 'init-tabs)
+#+END_SRC
 * Navigation
 ** Selection behaviour
 Replace the active region just by typing text, just like modern editors
@@ -258,170 +257,7 @@ Replace the active region just by typing text, just like modern editors
 #+END_SRC
 *** Move between panes
 #+BEGIN_SRC emacs-lisp
-;; Add shift-arrow key binding to swich between windows
 (windmove-default-keybindings 'meta)
-#+END_SRC
-
-** Tabbar
-#+BEGIN_SRC emacs-lisp
-;; tabbar
-(use-package tabbar
-  :ensure t)
-(tabbar-mode t)
-(global-set-key [M-S-left] 'tabbar-backward-tab)
-(global-set-key [M-S-right] 'tabbar-forward-tab)
-;; BUFFER MODIFICATION STATE INDICATOR
-(defadvice tabbar-buffer-tab-label (after fixup_tab_label_space_and_flag activate)
-   (setq ad-return-value
-         (if (and (buffer-modified-p (tabbar-tab-value tab))
-                  (buffer-file-name (tabbar-tab-value tab)))
-             (concat "*" (concat ad-return-value " "))
-           (concat " " (concat ad-return-value " ")))))
-(defun ztl-modification-state-change ()
-   (tabbar-set-template tabbar-current-tabset nil)
-   (tabbar-display-update))
-(defun ztl-on-buffer-modification ()
-   (set-buffer-modified-p t)
-   (ztl-modification-state-change))
-(add-hook 'after-save-hook 'ztl-modification-state-change)
-(add-hook 'first-change-hook 'ztl-on-buffer-modification)
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-(defun tabbar-move-current-tab-one-place-left ()
-      "Move current tab one place left, unless it's already the leftmost."
-      (interactive)
-      (let* ((bufset (tabbar-current-tabset t))
-             (old-bufs (tabbar-tabs bufset))
-             (first-buf (car old-bufs))
-             (new-bufs (list)))
-        (if (string= (buffer-name) (format "%s" (car first-buf)))
-            old-bufs ; the current tab is the leftmost
-          (setq not-yet-this-buf first-buf)
-          (setq old-bufs (cdr old-bufs))
-          (while (and
-                  old-bufs
-                  (not (string= (buffer-name) (format "%s" (car (car old-bufs))))))
-            (push not-yet-this-buf new-bufs)
-            (setq not-yet-this-buf (car old-bufs))
-            (setq old-bufs (cdr old-bufs)))
-          (if old-bufs ; if this is false, then the current tab's buffer name is mysteriously missing
-              (progn
-                (push (car old-bufs) new-bufs) ; this is the tab that was to be moved
-                (push not-yet-this-buf new-bufs)
-                (setq new-bufs (reverse new-bufs))
-                (setq new-bufs (append new-bufs (cdr old-bufs))))
-            (error "Error: current buffer's name was not found in Tabbar's buffer list."))
-          (set bufset new-bufs)
-          (tabbar-set-template bufset nil)
-          (tabbar-display-update))))
-;;
-(defun tabbar-move-current-tab-one-place-right ()
-      "Move current tab one place right, unless it's already the rightmost."
-      (interactive)
-      (let* ((bufset (tabbar-current-tabset t))
-             (old-bufs (tabbar-tabs bufset))
-             (first-buf (car old-bufs))
-             (new-bufs (list)))
-        (while (and
-                old-bufs
-                (not (string= (buffer-name) (format "%s" (car (car old-bufs))))))
-          (push (car old-bufs) new-bufs)
-          (setq old-bufs (cdr old-bufs)))
-        (if old-bufs ; if this is false, then the current tab's buffer name is mysteriously missing
-            (progn
-              (setq the-buffer (car old-bufs))
-              (setq old-bufs (cdr old-bufs))
-              (if old-bufs ; if this is false, then the current tab is the rightmost
-                  (push (car old-bufs) new-bufs))
-              (push the-buffer new-bufs)) ; this is the tab that was to be moved
-          (error "Error: current buffer's name was not found in Tabbar's buffer list."))
-        (setq new-bufs (reverse new-bufs))
-        (setq new-bufs (append new-bufs (cdr old-bufs)))
-        (set bufset new-bufs)
-        (tabbar-set-template bufset nil)
-        (tabbar-display-update)))
-;;
-;; Key sequences "C-S-PgUp" and "C-S-PgDn" move the current tab to the left and to the right.
-(global-set-key (kbd "C-S-<prior>") 'tabbar-move-current-tab-one-place-left)
-(global-set-key (kbd "C-S-<next>") 'tabbar-move-current-tab-one-place-right)
-#+END_SRC
-** centaur-tabs
-#+BEGIN_SRC emacs-lisp
-(use-package centaur-tabs
-  :ensure t
-  :demand
-  :config
-    (centaur-tabs-mode t)
-    (setq centaur-tabs-style "bar")
-    (setq centaur-tabs-set-icons t)
-    (setq centaur-tabs-set-modified-marker t)
-    (setq centaur-tabs-set-modified-marker "°")
-    (setq centaur-tabs-set-bar 'under)
-    (setq centaur-tabs-close-buttom "X")
-    (setq centaur-tabs-cycle-scope 'tabs)
-    (centaur-tabs-group-by-projectile-project)
-    (centaur-tabs-headline-match)
-  :bind
-  ("M-S-<left>" . centaur-tabs-backward)
-  ("M-S-<right>" . centaur-tabs-forward)
-  ("M-S-<up>" . centaur-tabs-move-current-tab-to-left)
-  ("M-S-<down>" . centaur-tabs-move-current-tab-to-right))
-
-#+END_SRC
-** Searching/sorting enhancements & project management
-*** ivy mode/ivy-frame and swiper
-#+BEGIN_SRC emacs-lisp
-(use-package ivy
-  :ensure t
-  :config (ivy-mode 1))
-
-(use-package counsel
-  :after ivy
-  :config (counsel-mode))
-
-(use-package ivy
-  :defer 0.1
-  :diminish
-  :bind (("C-c C-r" . ivy-resume)
-         ("C-x B" . ivy-switch-buffer-other-window))
-  :custom
-  (ivy-count-format "(%d/%d) ")
-  (ivy-use-virtual-buffers t)
-  :config (ivy-mode))
-
-(use-package ivy-rich
-  :after ivy
-  :custom
-  (ivy-virtual-abbreviate 'full
-                          ivy-rich-switch-buffer-align-virtual-buffer t
-                          ivy-rich-path-style 'abbrev)
-  :config
-  (ivy-set-display-transformer 'ivy-switch-buffer
-                               'ivy-rich-switch-buffer-transformer))
-
-(use-package swiper
-  :after ivy
-  :bind (("C-s" . swiper)
-         ("C-r" . swiper)))
-
-(use-package posframe
-  :ensure t)
-(use-package ivy-posframe
-  :ensure t
-  :config
-    (setq ivy-posframe-min-width 90
-          ivy-posframe-width 110)
-    (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-top-center)))
-    (ivy-posframe-enable))
-    (setq ivy-posframe-parameters
-     '((left-fringe . 8)
-       (right-fringe . 8)))
-#+END_SRC
-Using iedit to search-replace
-#+BEGIN_SRC emacs-lisp
-(use-package iedit
-  :ensure t)
 #+END_SRC
 
 * Programming language
@@ -429,7 +265,10 @@ Using iedit to search-replace
 #+BEGIN_SRC emacs-lisp
 (require 'init-python)
 #+END_SRC
-
+* Treemacs
+#+BEGIN_SRC emacs-lisp
+(require 'init-treemacs)
+#+END_SRC
 * Miscellaneous
 ** Clean up whitespace on save
 #+BEGIN_SRC emacs-lisp
@@ -451,35 +290,25 @@ Delete intermediate buffers when navigating through dired.
 #+END_SRC
 ** NeoTree
 #+BEGIN_SRC emacs-lisp
-(use-package neotree
-  :ensure t)
-(global-set-key [f8] 'neotree-toggle)
+;; (use-package neotree
+;;   :ensure t)
+;; (global-set-key [f8] 'neotree-toggle)
 ;; (global-hl-line-mode +1)
-#+END_SRC
-** Multiple cursor
-#+BEGIN_SRC emacs-lisp
-(use-package multiple-cursors
-  :ensure t)
-(global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
-(global-set-key (kbd "C-S-d") 'mc/mark-next-word-like-this)
-(global-set-key (kbd "C-S-x") 'mc/mark-previous-word-like-this)
 #+END_SRC
 ** Show matching parentheses
 Reduce the highlight delay to instantly.
 #+BEGIN_SRC emacs-lisp
-  (use-package paren
-    :ensure nil
-    :init (setq show-paren-delay 0)
-    :config (show-paren-mode +1))
+;; (use-package paren
+;;   :ensure nil
+;;   :init (setq show-paren-delay 0)
+;;   :config (show-paren-mode +1))
 #+END_SRC
 ** Autopair mode
 Electric-pair-mode has improved quite a bit in recent Emacs versions. No longer need an extra package for this. It also takes care of the new-line-and-push-brace feature.
 #+BEGIN_SRC emacs-lisp
-  (use-package elec-pair
-    :ensure nil
-    :hook (prog-mode . electric-pair-mode))
-#+END_SRC
-#+BEGIN_SRC emacs-lisp
+;; (use-package elec-pair
+;;   :ensure nil
+;;   :hook (prog-mode . electric-pair-mode))
 #+END_SRC
 ** Fill column indicator
 #+BEGIN_SRC emacs-lisp
@@ -489,24 +318,23 @@ Electric-pair-mode has improved quite a bit in recent Emacs versions. No longer 
   (global-fci-mode 1)
 (setq fci-rule-column 80)
 #+END_SRC
-
 ** Programming language support and utilities
 *** Company for auto-completion
 Use ~C-n~ and ~C-p~ to navigate the tooltip.
 #+BEGIN_SRC emacs-lisp
-  (use-package company
-    :diminish company-mode
-    :hook (prog-mode . company-mode)
-    :config
-    (setq company-minimum-prefix-length 1
-          company-idle-delay 0.1
-          company-selection-wrap-around t
-          company-tooltip-align-annotations t
-          company-frontends '(company-pseudo-tooltip-frontend ; show tooltip even for single candidate
-                              company-echo-metadata-frontend))
-    (with-eval-after-load 'company
-      (define-key company-active-map (kbd "C-n") 'company-select-next)
-      (define-key company-active-map (kbd "C-p") 'company-select-previous)))
+;; (use-package company
+;;   :diminish company-mode
+;;   :hook (prog-mode . company-mode)
+;;   :config
+;;   (setq company-minimum-prefix-length 1
+;;         company-idle-delay 0.1
+;;         company-selection-wrap-around t
+;;         company-tooltip-align-annotations t
+;;         company-frontends '(company-pseudo-tooltip-frontend ; show tooltip even for single candidate
+;;                             company-echo-metadata-frontend))
+;;   (with-eval-after-load 'company
+;;     (define-key company-active-map (kbd "C-n") 'company-select-next)
+;;     (define-key company-active-map (kbd "C-p") 'company-select-previous)))
 #+END_SRC
 *** Flycheck
 A modern on-the-fly syntax checking extension -- absolute essential
@@ -540,7 +368,7 @@ A modern on-the-fly syntax checking extension -- absolute essential
   ;; (setq flycheck-emacs-lisp-load-path 'inherit)
 
   ;; Only check while saving and opening files
-  ;; (setq flycheck-check-syntax-automatically '(save mode-enabled))
+  (setq flycheck-check-syntax-automatically '(save mode-enabled))
 
   ;; Set fringe style
   ;; (setq flycheck-indication-mode 'right-fringe)
@@ -601,22 +429,6 @@ Markdown mode and JSON mode
     :mode "\\.json\\'"
     :ensure t)
 #+END_SRC
-*** Diff-hl
-#+BEGIN_SRC emacs-lisp
-;; (use-package diff-hl
-;;   :ensure t)
-;; (global-diff-hl-mode)
-#+END_SRC
-*** Highlight
-#+BEGIN_SRC emacs-lisp
-(require 'init-highlight)
-#+END_SRC
-*** Highlight indentation
-#+BEGIN_SRC emacs-lisp
-(use-package highlight-indentation
-  :ensure t)
-(add-hook 'prog-mode-hook 'highlight-indentation-mode)
-#+END_SRC
 *** Yafolding
 #+BEGIN_SRC emacs-lisp
 (use-package yafolding
@@ -629,13 +441,6 @@ Markdown mode and JSON mode
     (define-key map (kbd "<C-M-return>") #'yafolding-toggle-all)
     (define-key map (kbd "<C-return>") #'yafolding-toggle-element)
     map))
-#+END_SRC
-** Doom-modeline
-#+BEGIN_SRC emacs-lisp
-(use-package doom-modeline
-  :ensure t
-  :hook (after-init . doom-modeline-mode))
-(setq doom-modeline-height 10)
 #+END_SRC
 ** Magit
 #+BEGIN_SRC emacs-lisp
