@@ -154,41 +154,14 @@
 #+BEGIN_SRC emacs-lisp
 (require 'init-org)
 #+END_SRC
-# ** Org mode export config
-# #+BEGIN_SRC emacs-lisp
-# ; (defun org-set-ascii-text-width ()
-# ;   (save-excursion (setq org-ascii-text-width
-# ;                         (cadr (goto-longest-line (point-min) (point-max))))))
-# (setq org-ascii-text-width 10000)
-# #+END_SRC
-# ** Org mode for all *.org files
-# #+BEGIN_SRC emacs-lisp
-# (require 'org)
-# (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
-# #+END_SRC
 
 # ** Org-mode bullets
-# #+BEGIN_SRC emacs-lisp
-# (use-package org
-#   :hook ((org-mode . visual-line-mode)
-#          (org-mode . org-indent-mode)))
-# (use-package org-bullets
-#   :ensure t
-#   :hook (org-mode . org-bullets-mode))
-# #+END_SRC
+#+BEGIN_SRC emacs-lisp
+(use-package org
+  :hook ((org-mode . visual-line-mode)
+         (org-mode . org-indent-mode)))
+#+END_SRC
 
-# ** Markdonw export
-# #+BEGIN_SRC emacs-lisp
-# ;; markdonw exporter in org-mode
-# ;; (add-to-list 'load-path
-# ;;              "~/.emacs.d/ox-gfm")
-# (use-package ox-gfm
-#   :ensure t)
-# (eval-after-load "org"
-#   '(require 'ox-gfm nil t))
-# #+END_SRC
-
-# ** Color Highligth Code Block org-mode
 #+BEGIN_SRC emacs-lisp
 (setq org-src-fontify-natively t
       org-src-tab-acts-natively t
