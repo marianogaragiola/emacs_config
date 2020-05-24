@@ -54,12 +54,12 @@
  '(custom-safe-themes
    (quote
     ("585942bb24cab2d4b2f74977ac3ba6ddbd888e3776b9d2f993c5704aa8bb4739" default)))
- '(doom-modeline-minor-modes t t)
- '(doom-modeline-mu4e nil t)
- '(doom-modeline-unicode-fallback t t)
+ '(doom-modeline-minor-modes t)
+ '(doom-modeline-mu4e nil)
+ '(doom-modeline-unicode-fallback t)
  '(package-selected-packages
    (quote
-    (treemacs-persp treemacs-magit treemacs-projectile flyspell-correct-ivy mixed-pitch virtualenvwrapper pythonic pyenv-mode flycheck-posframe flx-ido use-package yasnippet-snippets toml-mode tabbar popup neotree multiple-cursors markdown-preview-mode gruvbox-theme flymd flycheck fill-column-indicator elpy dockerfile-mode docker-compose-mode better-shell autopair))))
+    (websocket ein treemacs-persp treemacs-magit treemacs-projectile flyspell-correct-ivy mixed-pitch virtualenvwrapper pythonic pyenv-mode flycheck-posframe flx-ido use-package yasnippet-snippets toml-mode tabbar popup neotree multiple-cursors markdown-preview-mode gruvbox-theme flymd flycheck fill-column-indicator elpy dockerfile-mode docker-compose-mode better-shell autopair))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -70,6 +70,10 @@
  '(diff-hl-insert ((t (:background nil))))
  '(flycheck-posframe-border-face ((t (:inherit default))))
  '(hl-line ((t (:extend t))))
+ '(org-ellipsis ((t (:foreground nil))))
+ '(org-pomodoro-mode-line ((t (:inherit warning))))
+ '(org-pomodoro-mode-line-break ((t (:inherit success))))
+ '(org-pomodoro-mode-line-overtime ((t (:inherit error))))
  '(pulse-highlight-face ((t (:inherit region))))
  '(pulse-highlight-start-face ((t (:inherit region))))
  '(symbol-overlay-default-face ((t (:inherit (region bold))))))

@@ -11,44 +11,6 @@
 (setq frame-inhibit-implied-resize t
       frame-resize-pixelwise t)
 
-;; Menu/Tool/Scroll bars
-;; (unless emacs/>=27p
-;;   (push '(menu-bar-lines . 0) default-frame-alist)
-;;   (push '(tool-bar-lines . 0) default-frame-alist)
-;;   (push '(vertical-scroll-bars) default-frame-alist))
-
-;; Theme
-;; (if (centaur-compatible-theme-p centaur-theme)
-;;     (progn
-;;       ;; Make certain buffers grossly incandescent
-;;       ;; Must before loading the theme
-;;       (use-package solaire-mode
-;;         :functions persp-load-state-from-file
-;;         :hook (((change-major-mode after-revert ediff-prepare-buffer) . turn-on-solaire-mode)
-;;                (minibuffer-setup . solaire-mode-in-minibuffer)
-;;                (after-load-theme . solaire-mode-swap-bg))
-;;         :init
-;;         (solaire-global-mode 1)
-;;         (advice-add #'persp-load-state-from-file
-;;                     :after #'solaire-mode-restore-persp-mode-buffers))
-
-;;       (use-package doom-themes
-;;         :custom-face
-;;         (doom-modeline-buffer-file ((t (:inherit (mode-line bold)))))
-;;         :custom
-;;         (doom-dark+-blue-modeline t)
-;;         (doom-themes-treemacs-theme "doom-colors")
-;;         :init (centaur-load-theme centaur-theme t)
-;;         :config
-;;         ;; Enable flashing mode-line on errors
-;;         (doom-themes-visual-bell-config)
-
-;;         ;; Enable customized theme
-;;         (doom-themes-treemacs-config)))
-;;   (progn
-;;     (warn "The current theme may not be compatible!")
-;;     (centaur-load-theme centaur-theme t)))
-
 ;; Mode-line
 (use-package doom-modeline
   :custom
@@ -200,24 +162,6 @@
                '(nov-mode all-the-icons-faicon "book" :height 1.0 :v-adjust -0.1 :face all-the-icons-green))
   (add-to-list 'all-the-icons-mode-icon-alist
                '(gfm-mode all-the-icons-octicon "markdown" :face all-the-icons-lblue)))
-
-;; Show native line numbers if possible, otherwise use `linum'
-(if (fboundp 'display-line-numbers-mode)
-    (use-package display-line-numbers
-      :ensure nil
-      :hook (prog-mode . display-line-numbers-mode))
-  (use-package linum-off
-    :demand
-    :defines linum-format
-    :hook (after-init . global-linum-mode)
-    :init (setq linum-format "%4d ")
-    :config
-    ;; Highlight current line number
-    (use-package hlinum
-      :defines linum-highlight-in-all-buffersp
-      :custom-face (linum-highlight-face ((t (:inherit default :background nil :foreground nil))))
-      :hook (global-linum-mode . hlinum-activate)
-      :init (setq linum-highlight-in-all-buffersp t))))
 
 ;; Suppress GUI features
 (setq use-file-dialog nil

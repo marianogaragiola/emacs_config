@@ -97,8 +97,8 @@
 (menu-bar-mode -1)
 (scroll-bar-mode -1)
 (set-default 'truncate-lines t)
-;; (global-linum-mode t)
 (column-number-mode 1)
+(global-display-line-numbers-mode t)
 (progn
   ;; make indentation commands use space only (never tab character)
   (setq-default indent-tabs-mode nil)

@@ -211,6 +211,10 @@
          ([M-down] . pager-row-down)
          ([M-kp-2] . pager-row-down)))
 
+(setq scroll-conservatively 101) ;; move minimum when cursor exits view, instead of recentering
+(setq mouse-wheel-scroll-amount '(1)) ;; mouse scroll moves 1 line at a time, instead of 5 lines
+(setq mouse-wheel-progressive-speed nil) ;; on a long mouse scroll keep scrolling by 1 line
+
 ;; Treat undo history as a tree
 ;; (use-package undo-tree
 ;;   :diminish
