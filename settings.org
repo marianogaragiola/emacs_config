@@ -264,28 +264,6 @@ Delete intermediate buffers when navigating through dired.
         (put 'dired-find-alternate-file 'disabled nil)
         (define-key dired-mode-map (kbd "RET") #'dired-find-alternate-file))))
 #+END_SRC
-** NeoTree
-#+BEGIN_SRC emacs-lisp
-;; (use-package neotree
-;;   :ensure t)
-;; (global-set-key [f8] 'neotree-toggle)
-;; (global-hl-line-mode +1)
-#+END_SRC
-** Show matching parentheses
-Reduce the highlight delay to instantly.
-#+BEGIN_SRC emacs-lisp
-;; (use-package paren
-;;   :ensure nil
-;;   :init (setq show-paren-delay 0)
-;;   :config (show-paren-mode +1))
-#+END_SRC
-** Autopair mode
-Electric-pair-mode has improved quite a bit in recent Emacs versions. No longer need an extra package for this. It also takes care of the new-line-and-push-brace feature.
-#+BEGIN_SRC emacs-lisp
-;; (use-package elec-pair
-;;   :ensure nil
-;;   :hook (prog-mode . electric-pair-mode))
-#+END_SRC
 ** Fill column indicator
 #+BEGIN_SRC emacs-lisp
 (use-package fill-column-indicator

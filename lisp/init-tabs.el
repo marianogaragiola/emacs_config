@@ -10,7 +10,7 @@
   (setq centaur-tabs-style "bar")
   (setq centaur-tabs-set-icons t)
   (setq centaur-tabs-set-modified-marker t)
-  (setq centaur-tabs-set-modified-marker "°")
+  ;; (setq centaur-tabs-set-modified-marker "*")
   (setq centaur-tabs-set-bar 'under)
   (setq centaur-tabs-close-buttom "X")
   (setq centaur-tabs-cycle-scope 'tabs)
