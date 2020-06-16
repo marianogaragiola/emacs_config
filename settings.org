@@ -402,3 +402,20 @@ Markdown mode and JSON mode
   :ensure t
   :diminish magit-mode)
 #+END_SRC
+** Wucuo spell check
+#+BEGIN_SRC emacs-lisp
+(use-package wucuo
+  :ensure t)
+;; (add-hook 'prog-mode-hook #'wucuo-start)
+;; (add-hook 'text-mode-hook #'wucuo-start)
+#+END_SRC
+* Evil-Mode
+#+BEGIN_SRC emacs-lisp
+;; Download Evil
+(unless (package-installed-p 'evil)
+  (package-install 'evil))
+
+;; Enable Evil
+(require 'evil)
+(evil-mode 1)
+#+END_SRC
